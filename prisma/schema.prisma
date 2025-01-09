@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model CommandUsage {
+  id       Int      @id @default(autoincrement())
+  command  String
+  commandId String
+  options  String?
+  userId   String
+  guildId  String?
+  channelId String?
+  success  Boolean?
+  errorMessage String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([command])
+  @@index([userId])
+  @@index([guildId])
+  @@index([channelId])
+}
