@@ -4,11 +4,13 @@ import { discordClient, startDiscordClient, syncCommands } from './discord-clien
 import { DiscordCommand } from './types/discord';
 import { createCommandUsage, updateCommandFailure, updateCommandUsageSuccess } from './database/command-usage';
 import { Logger } from './logging/logger';
-import { exampleCommand } from './slash-commands/example-command';
+import { meaningOf } from './slash-commands/meaning-of';
+import { QUESTION_CHANNEL_ID } from './configurations/config';
+import { handleQuestionMessage } from './events/handleQuestionMessage';
 
 const commands: DiscordCommand[] = [
   // Enter your commands here explicitly
-  exampleCommand,
+  meaningOf,
 ];
 
 const commandCollection = new Collection<string, DiscordCommand>();
@@ -29,6 +31,10 @@ discordClient.once('ready', async (client) => {
 
   process.on('SIGTERM', gracefulShutdown);
   process.on('SIGINT', gracefulShutdown);
+
+  client.on(Events.MessageCreate, async (message) => {
+    if (message.channelId === QUESTION_CHANNEL_ID) handleQuestionMessage(message);
+  });
 
   client.on(Events.InteractionCreate, async (interaction) => {
     if (!interaction.isCommand()) return;

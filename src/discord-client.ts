@@ -4,7 +4,7 @@ import { DISCORD_CLIENT_ID, DISCORD_TOKEN } from './configurations/config';
 import { Logger } from './logging/logger';
 
 export const discordClient = new Client({
-  intents: [GatewayIntentBits.Guilds],
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
   partials: [],
 });
 
